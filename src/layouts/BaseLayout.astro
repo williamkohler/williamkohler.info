@@ -14,8 +14,7 @@ const { title, description } = Astro.props;
 
 const nav = [
   { href: '#projects', label: 'Projects' },
-  { href: '#work', label: 'Work' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#work', label: 'Experience' },
 ];
 ---
 
@@ -39,7 +38,31 @@ const nav = [
       <div
         class="mx-auto flex max-w-(--container-site) items-center justify-between gap-4 px-6 py-4"
       >
-        <div></div>
+        {/* Contact actions live here rather than in the hero, so they stay reachable
+            once the page is scrolled. Labels shorten below `sm` to fit beside the nav. */}
+        <div class="flex items-center gap-2">
+          <a
+            href={`mailto:${SITE.email}`}
+            class="rounded-md px-3 py-1.5 text-sm font-medium text-brand transition-colors hover:bg-border/40"
+          >
+            Get in touch
+          </a>
+          <a
+            href={SITE.resume}
+            download="Bill-Kohler-Resume.pdf"
+            class="rounded-md px-3 py-1.5 text-sm font-medium text-fg transition-colors hover:bg-border/40 hover:text-accent"
+          >
+            Resume<span class="hidden sm:inline"> (PDF)</span>
+          </a>
+          <a
+            href={SITE.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-md px-3 py-1.5 text-sm font-medium text-fg transition-colors hover:bg-border/40 hover:text-accent"
+          >
+            GitHub
+          </a>
+        </div>
         <div class="flex items-center gap-1">
           <nav aria-label="Sections" class="hidden sm:flex sm:items-center sm:gap-1">
             {
@@ -63,11 +86,8 @@ const nav = [
     </main>
 
     <footer class="border-t border-border/60 py-10">
-      <div
-        class="mx-auto flex max-w-(--container-site) flex-col gap-2 px-6 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between"
-      >
+      <div class="mx-auto max-w-(--container-site) px-6 text-sm text-subtle">
         <p>© {new Date().getFullYear()} {SITE.name}</p>
-        <p>Built with Astro. Hosted on GitHub Pages.</p>
       </div>
     </footer>
   </body>

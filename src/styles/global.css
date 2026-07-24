@@ -19,6 +19,11 @@
   --accent-light: oklch(0.52 0.10 195);
   --accent-dark: oklch(0.78 0.09 195);
 
+  /* Brand gold, carried over from hihat. Used sparingly — the primary contact
+     link — so it stays distinct from the teal accent. */
+  --brand-light: oklch(0.62 0.13 85);
+  --brand-dark: oklch(0.80 0.12 85);
+
   --c-bg: var(--ink-50);
   --c-surface: oklch(1 0 0);
   --c-fg: var(--ink-950);
@@ -26,6 +31,7 @@
   --c-subtle: var(--ink-400);
   --c-border: var(--ink-200);
   --c-accent: var(--accent-light);
+  --c-brand: var(--brand-light);
   --c-selection: oklch(0.52 0.10 195 / 0.18);
 }
 
@@ -39,6 +45,7 @@
   --c-subtle: oklch(0.58 0.010 265);
   --c-border: oklch(0.31 0.010 265);
   --c-accent: var(--accent-dark);
+  --c-brand: var(--brand-dark);
   --c-selection: oklch(0.78 0.09 195 / 0.22);
 }
 
@@ -54,6 +61,7 @@
   --color-subtle: var(--c-subtle);
   --color-border: var(--c-border);
   --color-accent: var(--c-accent);
+  --color-brand: var(--c-brand);
 }
 
 @theme {

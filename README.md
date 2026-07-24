@@ -21,10 +21,17 @@ repoStatus: public                               # or: private
 tech: [Elixir, Phoenix]
 year: "2026"          # must be quoted — bare numbers fail the schema
 order: 5              # display order, low first
+screenshot: example.png          # optional; file in src/assets/projects/
+screenshotAlt: What the screenshot shows.   # required whenever screenshot is set
 highlights:
   - Something notable.
 ---
 ```
+
+**Screenshots** live in `src/assets/projects/` (not `public/`) so Astro's
+`<Image />` can optimize them to WebP at build time. Reference one by filename in
+`screenshot:` and always pair it with `screenshotAlt:` — the schema fails the build
+if a screenshot has no alt text. Cards without a screenshot render text-only.
 
 **Add a job:** create `src/content/work/<company>.md`. A company holds an array
 of `roles`, so promotions live in one file (see `mastercard.md` for three).

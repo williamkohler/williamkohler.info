@@ -9,6 +9,16 @@ summary: >-
 repoStatus: private
 tech: [Elixir, Phoenix, LiveView, GenServer, PubSub, Tailwind CSS]
 year: "2026"
+icon: /icons/spinbook.png
+iconInvertOnDark: false
+screenshot:
+  - spinbook-betting.png
+  - spinbook-matches.png
+  - spinbook.png
+screenshotAlt:
+  - A live spinbook match between Bird and Keel, with round-by-round versus banners and three betting markets — Outcome, Technical, and Chaos — offering wagers on the round winner, first X-Dash scorer, match duration, and a double burst, each showing as locked while awaiting a result.
+  - The spinbook match list, showing live Beyblade X matchups with each player's three-blade lineup and the ratchet and bit combination for every blade.
+  - The spinbook leaderboard — a frosted-glass podium ranking the top three bettors by BeyCoin balance, above a list of remaining ranks.
 order: 2
 highlights:
   - Per-match GenServer bookie engine isolating each match's state and betting pool.

@@ -15,38 +15,37 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
   <div id="top"></div>
 
   {/* ---- Hero ---- */}
-  <section class="mx-auto max-w-(--container-site) px-6 py-20 sm:py-28">
-    <p class="text-xs uppercase tracking-[0.18em] text-accent">
-      {SITE.location}
-    </p>
-    <h1 class="mt-4 text-4xl font-semibold tracking-tighter text-fg sm:text-5xl">
+  {/* Shorter than it was — the action buttons now live in the header. */}
+  <section class="mx-auto max-w-(--container-site) px-6 py-14 sm:py-20">
+    <h1 class="text-4xl font-semibold tracking-tighter text-fg sm:text-5xl">
       {SITE.name}
     </h1>
-    <p class="mt-3 text-xl text-muted sm:text-2xl">{SITE.role}</p>
+    <p class="mt-3 text-xl text-muted sm:text-2xl">{SITE.role} in {SITE.location}</p>
 
-    <div class="mt-8 flex flex-wrap items-center gap-3">
-      <a
-        href={`mailto:${SITE.email}`}
-        class="rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg transition-opacity hover:opacity-90"
-      >
-        Get in touch
-      </a>
-      <a
-        href={SITE.resume}
-        download="Bill-Kohler-Resume.pdf"
-        class="rounded-md border border-border px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent/50 hover:text-accent"
-      >
-        Resume (PDF)
-      </a>
-      <a
-        href={SITE.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="rounded-md border border-border px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent/50 hover:text-accent"
-      >
-        GitHub
-      </a>
-    </div>
+    {/* Contact details sit with the name rather than in their own section, so the
+        page opens with everything needed to get in touch. */}
+    <ul class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+      <li>
+        <a
+          href={SITE.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium text-accent hover:underline"
+        >
+          github.com/williamkohler
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://hihat.online"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium text-accent hover:underline"
+        >
+          hihat.online
+        </a>
+      </li>
+    </ul>
   </section>
 
   {/* ---- Projects ---- */}
@@ -69,19 +68,22 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
       <ul class="mt-5 space-y-5">
         {
           education.map((e) => (
-            <li class="flex gap-5 sm:gap-6">
-              <img
-                src={e.logo}
-                alt={`${e.school} logo`}
-                width="72"
-                height="56"
-                loading="lazy"
-                decoding="async"
-                class:list={[
-                  'h-14 w-18 shrink-0 object-contain',
-                  'brightenOnDark' in e && e.brightenOnDark && 'dark:brightness-150',
-                ]}
-              />
+            <li class="flex items-center gap-5 sm:gap-6">
+              {/* The grid centers the mark on both axes, so a wide wordmark like
+                  Northeastern's 7:1 strip sits in the middle of the box instead of
+                  floating in it. Padding keeps it off the border. */}
+              <span class="grid h-14 w-18 shrink-0 place-items-center rounded-md border border-border bg-surface p-1.5">
+                <img
+                  src={e.logo}
+                  alt={`${e.school} logo`}
+                  loading="lazy"
+                  decoding="async"
+                  class:list={[
+                    'max-h-full max-w-full object-contain',
+                    'brightenOnDark' in e && e.brightenOnDark && 'dark:brightness-150',
+                  ]}
+                />
+              </span>
               <div class="flex min-w-0 flex-1 flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
                 <span class="text-sm text-fg">
                   {e.school}
@@ -96,35 +98,4 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
     </div>
   </Section>
 
-  {/* ---- Contact ---- */}
-  <Section id="contact" title="Contact">
-    <div class="max-w-2xl">
-      <ul class="space-y-3 text-sm">
-        <li>
-          <a href={`mailto:${SITE.email}`} class="font-medium text-accent hover:underline">
-            {SITE.email}
-          </a>
-        </li>
-        <li>
-          <a
-            href={SITE.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="font-medium text-accent hover:underline"
-          >
-            github.com/williamkohler
-          </a>
-        </li>
-        <li>
-          <a
-            href={SITE.resume}
-            download="Bill-Kohler-Resume.pdf"
-            class="font-medium text-accent hover:underline"
-          >
-            Download resume (PDF)
-          </a>
-        </li>
-      </ul>
-    </div>
-  </Section>
 </BaseLayout>

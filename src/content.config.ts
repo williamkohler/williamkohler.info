@@ -58,15 +58,43 @@ const projects = defineCollection({
       repoStatus: z.enum(['public', 'private']).default('public'),
       tech: z.array(z.string()).min(1),
       year: z.string(),
-      /** Flagship gets the full-width treatment. */
-      /** Two icon paths that cross-fade on hover, e.g. hihat's open/closed marks. */
+      /** Path under public/, e.g. "/icons/spinbook.png". */
       icon: z.string().optional(),
+      /** Optional second mark that cross-fades on hover — only hihat has a pair. */
       iconHover: z.string().optional(),
+      /* The monochrome hihat SVGs are inverted to stay visible on dark. Full-color
+         artwork (goblin, spinbook) must opt out or the palette inverts with it. */
+      iconInvertOnDark: z.boolean().default(true),
+      /* One filename under src/assets/projects/ (e.g. "spinbook.png"), or several
+         for a gallery. Both forms coerce to an array so the card renders one path.
+         hihat ships three shots; the single-image projects keep the scalar form. */
+      screenshot: z
+        .union([z.string(), z.array(z.string()).min(1)])
+        .transform((v) => (typeof v === 'string' ? [v] : v))
+        .optional(),
+      /** Required alongside `screenshot`, one alt per image — see the refines below. */
+      screenshotAlt: z
+        .union([z.string(), z.array(z.string()).min(1)])
+        .transform((v) => (typeof v === 'string' ? [v] : v))
+        .optional(),
       order: z.number().int(),
       highlights: z.array(z.string()).default([]),
     })
     .refine((d) => d.repoStatus !== 'private' || d.repo === undefined, {
       message: 'Private projects must not define a repo URL',
+    })
+    .refine((d) => d.iconHover === undefined || d.icon !== undefined, {
+      message: 'iconHover requires icon',
+      path: ['iconHover'],
+    })
+    .refine((d) => d.screenshot === undefined || d.screenshotAlt !== undefined, {
+      message: 'A project with a screenshot must also define screenshotAlt',
+    })
+    /* Counts must match, otherwise a gallery image renders with no alt text — the
+       kind of gap that only shows up in a screen reader, never in the browser. */
+    .refine((d) => d.screenshot === undefined || d.screenshot.length === d.screenshotAlt!.length, {
+      message: 'screenshot and screenshotAlt must have the same number of entries',
+      path: ['screenshotAlt'],
     }),
 });
 

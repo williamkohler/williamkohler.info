@@ -1,13 +1,57 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 
 interface Props {
   project: CollectionEntry<'projects'>;
 }
 
 const { project } = Astro.props;
-const { name, tagline, summary, repo, demo, repoStatus, tech, highlights, icon, iconHover } =
-  project.data;
+const {
+  name,
+  tagline,
+  summary,
+  repo,
+  demo,
+  repoStatus,
+  tech,
+  highlights,
+  icon,
+  iconHover,
+  iconInvertOnDark,
+  screenshot,
+  screenshotAlt,
+} = project.data;
+
+/* `<Image />` needs a real module, not a path string, so the frontmatter filename
+   is resolved against a glob of the assets directory at build time. Eager so the
+   metadata (width/height) is available during render. */
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/projects/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true }
+);
+
+/* Schema guarantees screenshotAlt matches screenshot in length, so the index
+   lookup is safe. */
+const gallery = (screenshot ?? []).map((file, i) => {
+  const image = modules[`../assets/projects/${file}`]?.default;
+  if (!image) {
+    throw new Error(`${project.id}: screenshot "${file}" not found in src/assets/projects/`);
+  }
+  return { image, alt: screenshotAlt![i] };
+});
+
+const [lead, ...rest] = gallery;
+
+/* A portrait shot would lose its content to a 16:9 crop, so the frame follows the
+   image instead of the reverse. Phone captures are far taller again (~1:2.2) and
+   would sit as a sliver in a 4:5 box, so they get a frame of their own. */
+const frameFor = (image: ImageMetadata) => {
+  const ratio = image.height / image.width;
+  if (ratio > 1.5) return 'aspect-[9/16] object-contain';
+  if (ratio > 1) return 'aspect-[4/5] object-contain';
+  return 'aspect-[16/9] object-cover object-top';
+};
 ---
 
 <article
@@ -15,20 +59,30 @@ const { name, tagline, summary, repo, demo, repoStatus, tech, highlights, icon, 
 >
   <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
     {
-      icon && iconHover && (
-        /* Both icons occupy the same grid cell and cross-fade on card hover.
-           Stacking avoids the layout shift a src swap would cause. */
+      icon && (
+        /* With a hover mark, both icons occupy the same grid cell and cross-fade;
+           stacking avoids the layout shift a src swap would cause. On its own, the
+           single icon just sits in that cell. */
         <span class="grid size-8 shrink-0 place-items-center" aria-hidden="true">
           <img
             src={icon}
             alt=""
-            class="col-start-1 row-start-1 size-8 opacity-100 transition-opacity duration-200 group-hover:opacity-0 dark:invert"
+            class:list={[
+              'col-start-1 row-start-1 size-8 transition-opacity duration-200',
+              iconHover && 'group-hover:opacity-0',
+              iconInvertOnDark && 'dark:invert',
+            ]}
           />
-          <img
-            src={iconHover}
-            alt=""
-            class="col-start-1 row-start-1 size-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100 dark:invert"
-          />
+          {iconHover && (
+            <img
+              src={iconHover}
+              alt=""
+              class:list={[
+                'col-start-1 row-start-1 size-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+                iconInvertOnDark && 'dark:invert',
+              ]}
+            />
+          )}
         </span>
       )
     }
@@ -48,6 +102,56 @@ const { name, tagline, summary, repo, demo, repoStatus, tech, highlights, icon, 
   </div>
 
   <p class="mt-1 text-lg text-muted">{tagline}</p>
+
+  {
+    lead && (
+      <div class="mt-5 space-y-3">
+        {/* Links straight to the optimized asset — a full-size view with no
+            lightbox library, keeping the page free of client JS. */}
+        <a
+          href={lead.image.src}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block overflow-hidden rounded-(--radius-card) border border-border"
+        >
+          <Image
+            src={lead.image}
+            alt={lead.alt}
+            width={1200}
+            loading="lazy"
+            decoding="async"
+            class={`w-full bg-bg transition-transform duration-300 group-hover:scale-[1.02] ${frameFor(lead.image)}`}
+          />
+        </a>
+
+        {/* Secondary shots sit side by side on wider screens and stack on phones,
+            where half a card width would render the UI detail unreadable. */}
+        {rest.length > 0 && (
+          <ul class="grid gap-3 sm:grid-cols-2">
+            {rest.map((s) => (
+              <li>
+                <a
+                  href={s.image.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block overflow-hidden rounded-(--radius-card) border border-border"
+                >
+                  <Image
+                    src={s.image}
+                    alt={s.alt}
+                    width={600}
+                    loading="lazy"
+                    decoding="async"
+                    class={`w-full bg-bg transition-transform duration-300 hover:scale-[1.02] ${frameFor(s.image)}`}
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    )
+  }
 
   <p class="mt-4 text-sm leading-relaxed text-muted">{summary}</p>
 
