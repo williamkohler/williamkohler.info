@@ -44,5 +44,7 @@ export const education = [
     credential: 'B.S. Music, Minor in Business Administration',
     year: '2013',
     logo: '/logos/northeastern.svg',
+    // Dark red on a near-black background reads poorly; lift it in dark mode.
+    brightenOnDark: true,
   },
 ] as const;

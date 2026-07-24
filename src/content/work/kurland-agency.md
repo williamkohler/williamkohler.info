@@ -2,6 +2,8 @@
 company: The Kurland Agency
 location: Boston, MA
 logo: /logos/kurland-agency.png
+# Black artwork — invert it in dark mode so it doesn't vanish.
+invertOnDark: true
 start: 2013-01-01
 end: 2018-06-30
 note: Where the engineering career started — by automating the job I already had.

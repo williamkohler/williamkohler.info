@@ -22,6 +22,8 @@ const work = defineCollection({
       location: z.string(),
       /** Path under public/, e.g. "/logos/mastercard.svg". */
       logo: z.string().optional(),
+      /** Set for dark/black artwork that would disappear on a dark background. */
+      invertOnDark: z.boolean().default(false),
       /** Company-level span, so sorting never depends on digging through roles. */
       start: z.coerce.date(),
       end: z.coerce.date().nullable(),
@@ -58,6 +60,9 @@ const projects = defineCollection({
       year: z.string(),
       /** Flagship gets the full-width treatment. */
       featured: z.boolean().default(false),
+      /** Two icon paths that cross-fade on hover, e.g. hihat's open/closed marks. */
+      icon: z.string().optional(),
+      iconHover: z.string().optional(),
       order: z.number().int(),
       highlights: z.array(z.string()).default([]),
     })

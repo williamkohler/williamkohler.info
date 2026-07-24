@@ -11,6 +11,8 @@ repoStatus: private
 tech: [Elixir, Phoenix, LiveView, Oban, PostgreSQL, Fly.io]
 year: "2025–"
 featured: true
+icon: /icons/open-hihat.svg
+iconHover: /icons/closed-hihat.svg
 order: 1
 highlights:
   - Offer and deal-memo PDF ingestion with structured extraction, turning unstructured contracts into queryable deal terms.

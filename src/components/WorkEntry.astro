@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { company, location, logo, start, end, note, roles } = entry.data;
+const { company, location, logo, invertOnDark, start, end, note, roles } = entry.data;
 ---
 
 <article class="flex gap-5 sm:gap-6">
@@ -25,10 +25,13 @@ const { company, location, logo, start, end, note, roles } = entry.data;
           height="56"
           loading="lazy"
           decoding="async"
-          class="h-14 w-18 rounded-md border border-border bg-white object-contain p-2"
+          class:list={[
+            'h-14 w-18 object-contain',
+            invertOnDark && 'dark:brightness-0 dark:invert',
+          ]}
         />
       ) : (
-        <div class="h-14 w-18 rounded-md border border-border" aria-hidden="true" />
+        <div class="h-14 w-18" aria-hidden="true" />
       )
     }
   </div>

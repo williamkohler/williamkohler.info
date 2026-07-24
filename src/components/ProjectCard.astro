@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { name, tagline, summary, repo, demo, repoStatus, tech, featured, highlights } =
+const { name, tagline, summary, repo, demo, repoStatus, tech, featured, highlights, icon, iconHover } =
   project.data;
 ---
 
@@ -16,11 +16,43 @@ const { name, tagline, summary, repo, demo, repoStatus, tech, featured, highligh
     featured && 'sm:p-8',
   ]}
 >
-  <h3
-    class:list={['font-bold tracking-tight text-fg', featured ? 'text-2xl' : 'text-lg']}
-  >
-    {name}
-  </h3>
+  <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+    {
+      icon && iconHover && (
+        /* Both icons occupy the same grid cell and cross-fade on card hover.
+           Stacking avoids the layout shift a src swap would cause. */
+        <span class="grid size-8 shrink-0 place-items-center" aria-hidden="true">
+          <img
+            src={icon}
+            alt=""
+            class="col-start-1 row-start-1 size-8 opacity-100 transition-opacity duration-200 group-hover:opacity-0 dark:invert"
+          />
+          <img
+            src={iconHover}
+            alt=""
+            class="col-start-1 row-start-1 size-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100 dark:invert"
+          />
+        </span>
+      )
+    }
+    <h3
+      class:list={['font-bold tracking-tight text-fg', featured ? 'text-2xl' : 'text-lg']}
+    >
+      {name}
+    </h3>
+    {
+      demo && (
+        <a
+          href={demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ml-auto text-sm font-medium text-accent hover:underline"
+        >
+          {new URL(demo).hostname}
+        </a>
+      )
+    }
+  </div>
 
   <p class:list={['mt-1 text-muted', featured ? 'text-lg' : 'text-sm']}>{tagline}</p>
 
@@ -49,31 +81,8 @@ const { name, tagline, summary, repo, demo, repoStatus, tech, featured, highligh
     }
   </ul>
 
+  {/* The live-site link lives in the title row, so it is not repeated here. */}
   <div class="mt-5 flex flex-wrap items-center gap-4 text-sm">
-    {
-      demo && (
-        <a
-          href={demo}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 font-medium text-accent hover:underline"
-        >
-          Live site
-          <svg
-            class="size-3.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
-          </svg>
-        </a>
-      )
-    }
     {
       repo && (
         <a
