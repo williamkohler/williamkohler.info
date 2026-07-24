@@ -33,10 +33,16 @@ export const skillGroups = [
 ] as const;
 
 export const education = [
-  { school: 'Boston University', credential: 'Certificate in Computer Science', year: '2017' },
+  {
+    school: 'Boston University',
+    credential: 'Certificate in Computer Science',
+    year: '2017',
+    logo: '/logos/boston-university.svg',
+  },
   {
     school: 'Northeastern University',
     credential: 'B.S. Music, Minor in Business Administration',
     year: '2013',
+    logo: '/logos/northeastern.png',
   },
 ] as const;
