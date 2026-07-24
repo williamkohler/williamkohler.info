@@ -59,7 +59,6 @@ const projects = defineCollection({
       tech: z.array(z.string()).min(1),
       year: z.string(),
       /** Flagship gets the full-width treatment. */
-      featured: z.boolean().default(false),
       /** Two icon paths that cross-fade on hover, e.g. hihat's open/closed marks. */
       icon: z.string().optional(),
       iconHover: z.string().optional(),

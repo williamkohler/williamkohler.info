@@ -10,7 +10,6 @@ demo: https://hihat.online
 repoStatus: private
 tech: [Elixir, Phoenix, LiveView, Oban, PostgreSQL, Fly.io]
 year: "2025–"
-featured: true
 icon: /icons/open-hihat.svg
 iconHover: /icons/closed-hihat.svg
 order: 1

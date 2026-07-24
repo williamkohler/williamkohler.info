@@ -21,8 +21,7 @@ repoStatus: public                               # or: private
 tech: [Elixir, Phoenix]
 year: "2026"          # must be quoted — bare numbers fail the schema
 order: 5              # display order, low first
-featured: false       # true = full-width card (keep to one)
-highlights:           # only rendered on the featured card
+highlights:
   - Something notable.
 ---
 ```

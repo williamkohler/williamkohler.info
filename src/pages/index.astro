@@ -7,8 +7,6 @@ import WorkEntry from '../components/WorkEntry.astro';
 import { SITE, education } from '../data/site';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const featured = projects.filter((p) => p.data.featured);
-const rest = projects.filter((p) => !p.data.featured);
 
 const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -53,12 +51,9 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
 
   {/* ---- Projects ---- */}
   <Section id="projects" title="Projects">
+    {/* One full-width stack — every card gets the same width and treatment. */}
     <div class="space-y-5">
-      {featured.map((project) => <ProjectCard project={project} />)}
-
-      <div class="grid gap-5 sm:grid-cols-2">
-        {rest.map((project) => <ProjectCard project={project} />)}
-      </div>
+      {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </Section>
 
