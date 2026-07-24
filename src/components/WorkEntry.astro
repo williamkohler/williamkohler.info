@@ -18,7 +18,7 @@ const { company, location, start, end, note, roles } = entry.data;
 
   <header class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
     <h3 class="text-lg font-medium tracking-tight text-fg">{company}</h3>
-    <time class="font-mono text-xs text-subtle" datetime={isoMonth(start)}>
+    <time class="text-xs text-subtle" datetime={isoMonth(start)}>
       {formatRange(start, end)}
     </time>
   </header>
@@ -34,7 +34,7 @@ const { company, location, start, end, note, roles } = entry.data;
             <h4 class="text-sm font-medium text-fg">
               {role.title}
               {role.end === null && (
-                <span class="ml-2 rounded border border-accent/40 px-1.5 py-0.5 align-middle font-mono text-[0.65rem] uppercase tracking-wider text-accent">
+                <span class="ml-2 rounded border border-accent/40 px-1.5 py-0.5 align-middle text-[0.65rem] uppercase tracking-wider text-accent">
                   Current
                 </span>
               )}
@@ -42,7 +42,7 @@ const { company, location, start, end, note, roles } = entry.data;
             {/* Only show per-role dates when a company has more than one role —
                 otherwise it just repeats the company range directly above. */}
             {roles.length > 1 && (
-              <time class="font-mono text-xs text-subtle" datetime={isoMonth(role.start)}>
+              <time class="text-xs text-subtle" datetime={isoMonth(role.start)}>
                 {formatRange(role.start, role.end)}
               </time>
             )}

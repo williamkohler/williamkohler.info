@@ -1,6 +1,6 @@
 export const SITE = {
   name: 'Bill Kohler',
-  role: 'Senior Software Engineer',
+  role: 'Software Engineer',
   location: 'Boston, MA',
   email: 'bkohler4@gmail.com',
   github: 'https://github.com/williamkohler',
