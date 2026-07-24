@@ -42,7 +42,7 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
         download="Bill-Kohler-Resume.pdf"
         class="rounded-md border border-border px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent/50 hover:text-accent"
       >
-        Résumé (PDF)
+        Resume (PDF)
       </a>
       <a
         href={SITE.github}
@@ -55,33 +55,9 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
     </div>
   </section>
 
-  {/* ---- About ---- */}
-  <Section id="about" title="About">
-    <div class="max-w-2xl space-y-4 text-base leading-relaxed text-muted">
-      <p>
-        I started out in the music business, booking jazz, world, and blues artists
-        at a Boston talent agency. The work ran on spreadsheets, faxed contracts,
-        and a lot of institutional memory — so I started automating the parts of my
-        own job that a computer should have been doing. By the time I left, I was
-        running the agency's technology.
-      </p>
-      <p>
-        That turned into a decade of engineering. At Mastercard I worked on the
-        SessionM loyalty platform, moving from incident response into microservices
-        handling more than 100 million requests a day. At Youth Inc I own the
-        order-fulfillment integration layer end to end, led the platform's migration
-        to AWS, and built the observability stack that finally made silent failures
-        visible.
-      </p>
-      <p>
-        I'm drawn to the seams between systems — the integrations, the retries, the
-        idempotency keys, the places where two services disagree about what
-        happened. My side projects keep circling back to live music, which is
-        probably not a coincidence.
-      </p>
-    </div>
-
-    <dl class="mt-10 grid gap-6 sm:grid-cols-2">
+  {/* ---- Skills ---- */}
+  <Section id="skills" title="Skills">
+    <dl class="grid gap-6 sm:grid-cols-2">
       {
         skillGroups.map((group) => (
           <div>
@@ -135,11 +111,7 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
   {/* ---- Contact ---- */}
   <Section id="contact" title="Contact">
     <div class="max-w-2xl">
-      <p class="text-lg leading-relaxed text-muted">
-        Happy to talk about backend work, Elixir, or anything involving the
-        live-music business.
-      </p>
-      <ul class="mt-6 space-y-3 text-sm">
+      <ul class="space-y-3 text-sm">
         <li>
           <a href={`mailto:${SITE.email}`} class="font-medium text-accent hover:underline">
             {SITE.email}
@@ -161,7 +133,7 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
             download="Bill-Kohler-Resume.pdf"
             class="font-medium text-accent hover:underline"
           >
-            Download résumé (PDF)
+            Download resume (PDF)
           </a>
         </li>
       </ul>
