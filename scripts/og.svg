@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#fbfbfc"/>
+  <rect x="0" y="285" width="1200" height="8" fill="#0b7f8c"/>
+  <text x="90" y="520" font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="86" font-weight="bold" letter-spacing="-2" fill="#1b1c1e">Bill Kohler</text>
+  <text x="90" y="595" font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="42" fill="#5a5f66">Senior Software Engineer</text>
+  <text x="90" y="680" font-family="Menlo, monospace"
+        font-size="27" fill="#0b7f8c">Elixir · Phoenix · Ruby · AWS</text>
+  <text x="90" y="825" font-family="Menlo, monospace"
+        font-size="24" fill="#8b9098">williamkohler.info</text>
+</svg>

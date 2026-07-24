@@ -1,0 +1,25 @@
+---
+// Deliberately empty. This must stay a synchronous, blocking, inline script in
+// <head>. `is:inline` stops Astro bundling it — a bundled module script is
+// deferred, runs after first paint, and produces a white flash on dark loads.
+---
+
+<script is:inline>
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      // `stored !== 'light'` (not `!stored`) so a corrupt value falls back to
+      // the system preference rather than hard light.
+      var isDark =
+        stored === 'dark' ||
+        (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      var root = document.documentElement;
+      root.classList.toggle('dark', isDark);
+      // Set synchronously so native scrollbars and form controls match on the
+      // very first paint — otherwise dark loads flash a white scrollbar.
+      root.style.colorScheme = isDark ? 'dark' : 'light';
+    } catch (e) {
+      /* storage disabled (private mode): fall through to light */
+    }
+  })();
+</script>

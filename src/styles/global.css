@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* Tailwind v4 has no `darkMode: 'class'` config — the variant is declared here.
+   `:where()` keeps specificity at zero so `dark:` and base utilities stay at
+   equal weight and normal source order applies. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- Palette + semantic assignments ------------------------------------ */
+:root {
+  color-scheme: light;
+
+  --ink-950: oklch(0.17 0.008 265);
+  --ink-600: oklch(0.52 0.012 265);
+  --ink-400: oklch(0.70 0.010 265);
+  --ink-200: oklch(0.90 0.005 265);
+  --ink-50: oklch(0.985 0.002 265);
+
+  /* One restrained accent — a deep teal that reads engineering, not startup. */
+  --accent-light: oklch(0.52 0.10 195);
+  --accent-dark: oklch(0.78 0.09 195);
+
+  --c-bg: var(--ink-50);
+  --c-surface: oklch(1 0 0);
+  --c-fg: var(--ink-950);
+  --c-muted: var(--ink-600);
+  --c-subtle: var(--ink-400);
+  --c-border: var(--ink-200);
+  --c-accent: var(--accent-light);
+  --c-selection: oklch(0.52 0.10 195 / 0.18);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --c-bg: oklch(0.18 0.008 265);
+  --c-surface: oklch(0.22 0.009 265);
+  --c-fg: oklch(0.95 0.004 265);
+  --c-muted: oklch(0.72 0.010 265);
+  --c-subtle: oklch(0.58 0.010 265);
+  --c-border: oklch(0.31 0.010 265);
+  --c-accent: var(--accent-dark);
+  --c-selection: oklch(0.78 0.09 195 / 0.22);
+}
+
+/* ---- Design tokens ------------------------------------------------------ */
+/* `inline` is essential: it makes utilities emit `var(--color-fg)` instead of
+   resolving the value at build time, which is what lets `.dark` swap them at
+   runtime. With a plain `@theme` block here, dark mode silently does nothing. */
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-fg: var(--c-fg);
+  --color-muted: var(--c-muted);
+  --color-subtle: var(--c-subtle);
+  --color-border: var(--c-border);
+  --color-accent: var(--c-accent);
+}
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  /* ~1.25 major third, tightened at display sizes */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1rem;
+  --text-base--line-height: 1.7;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.65;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.45;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.08;
+
+  --tracking-tight: -0.02em;
+  --tracking-tighter: -0.035em;
+
+  --container-site: 48rem;
+
+  --radius-card: 0.75rem;
+}
+
+/* ---- Base styles -------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* clears the sticky header */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--c-selection);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
