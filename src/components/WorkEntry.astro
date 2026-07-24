@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatRange, isoMonth } from '../lib/dates';
+import { formatRange, isoYear } from '../lib/dates';
 
 interface Props {
   entry: CollectionEntry<'work'>;
@@ -36,7 +36,7 @@ const { company, location, logo, start, end, note, roles } = entry.data;
   <div class="min-w-0 flex-1">
     <header class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
       <h3 class="text-lg font-medium tracking-tight text-fg">{company}</h3>
-      <time class="text-xs text-subtle" datetime={isoMonth(start)}>
+      <time class="text-xs text-subtle" datetime={isoYear(start)}>
         {formatRange(start, end)}
       </time>
     </header>
@@ -60,7 +60,7 @@ const { company, location, logo, start, end, note, roles } = entry.data;
               {/* Only show per-role dates when a company has more than one role —
                   otherwise it just repeats the company range directly above. */}
               {roles.length > 1 && (
-                <time class="text-xs text-subtle" datetime={isoMonth(role.start)}>
+                <time class="text-xs text-subtle" datetime={isoYear(role.start)}>
                   {formatRange(role.start, role.end)}
                 </time>
               )}

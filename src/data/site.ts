@@ -43,6 +43,6 @@ export const education = [
     school: 'Northeastern University',
     credential: 'B.S. Music, Minor in Business Administration',
     year: '2013',
-    logo: '/logos/northeastern.png',
+    logo: '/logos/northeastern.svg',
   },
 ] as const;
