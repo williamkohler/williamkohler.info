@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import WorkEntry from '../components/WorkEntry.astro';
-import { SITE, skillGroups, education } from '../data/site';
+import { SITE, education } from '../data/site';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = projects.filter((p) => p.data.featured);
@@ -50,24 +50,6 @@ const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.
       </a>
     </div>
   </section>
-
-  {/* ---- Skills ---- */}
-  <Section id="skills" title="Skills">
-    <dl class="grid gap-6 sm:grid-cols-2">
-      {
-        skillGroups.map((group) => (
-          <div>
-            <dt class="text-xs uppercase tracking-[0.15em] text-subtle">
-              {group.label}
-            </dt>
-            <dd class="mt-2 text-sm leading-relaxed text-muted">
-              {group.items.join(' · ')}
-            </dd>
-          </div>
-        ))
-      }
-    </dl>
-  </Section>
 
   {/* ---- Projects ---- */}
   <Section id="projects" title="Projects">

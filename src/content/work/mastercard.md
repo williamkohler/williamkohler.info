@@ -1,6 +1,7 @@
 ---
 company: Mastercard
 location: Boston, MA
+logo: /logos/mastercard.svg
 start: 2018-06-01
 end: 2024-11-30
 note: Joined via the SessionM acquisition; promoted twice.

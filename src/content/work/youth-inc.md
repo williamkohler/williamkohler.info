@@ -1,6 +1,7 @@
 ---
 company: Youth Inc
 location: Boston, MA
+logo: /logos/youth-inc.jpg
 start: 2025-08-01
 end: null
 order: 1

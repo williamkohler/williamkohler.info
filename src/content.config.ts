@@ -20,6 +20,8 @@ const work = defineCollection({
     .object({
       company: z.string(),
       location: z.string(),
+      /** Path under public/, e.g. "/logos/mastercard.svg". */
+      logo: z.string().optional(),
       /** Company-level span, so sorting never depends on digging through roles. */
       start: z.coerce.date(),
       end: z.coerce.date().nullable(),

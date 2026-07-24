@@ -13,7 +13,6 @@ interface Props {
 const { title, description } = Astro.props;
 
 const nav = [
-  { href: '#skills', label: 'Skills' },
   { href: '#projects', label: 'Projects' },
   { href: '#work', label: 'Work' },
   { href: '#contact', label: 'Contact' },
@@ -40,9 +39,7 @@ const nav = [
       <div
         class="mx-auto flex max-w-(--container-site) items-center justify-between gap-4 px-6 py-4"
       >
-        <a href="#top" class="font-medium tracking-tight text-fg hover:text-accent">
-          {SITE.name}
-        </a>
+        <div></div>
         <div class="flex items-center gap-1">
           <nav aria-label="Sections" class="hidden sm:flex sm:items-center sm:gap-1">
             {
