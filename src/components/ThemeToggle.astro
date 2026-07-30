@@ -1,15 +1,21 @@
 ---
 ---
 
+{/* Three states cycle Light -> Dark -> System, so aria-pressed (a boolean) no
+    longer describes the control; the label names the current setting instead and
+    is rewritten on every change. Icons key off data-theme-setting rather than the
+    `dark` class, because "system resolving to dark" and "explicitly dark" are the
+    same class to CSS but must show different icons. Markup starts on the system
+    icon to match the default for a first-time visitor. */}
 <button
   id="theme-toggle"
   type="button"
-  aria-label="Toggle color theme"
-  aria-pressed="false"
-  class="cursor-pointer rounded-md p-2 text-muted transition-colors hover:bg-border/50 hover:text-fg"
+  data-theme-setting="system"
+  aria-label="Color theme: system"
+  class="group cursor-pointer rounded-md p-2 text-muted transition-colors hover:bg-border/50 hover:text-fg"
 >
   <svg
-    class="hidden size-5 dark:block"
+    class="hidden size-5 group-data-[theme-setting=light]:block"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -21,7 +27,7 @@
     <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
   </svg>
   <svg
-    class="block size-5 dark:hidden"
+    class="hidden size-5 group-data-[theme-setting=dark]:block"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -32,6 +38,19 @@
   >
     <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
   </svg>
+  <svg
+    class="hidden size-5 group-data-[theme-setting=system]:block"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="2" y="4" width="20" height="13" rx="2"></rect>
+    <path d="M8 21h8M12 17v4"></path>
+  </svg>
 </button>
 
 <script is:inline>
@@ -39,32 +58,42 @@
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
     var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    var ORDER = ['light', 'dark', 'system'];
 
-    function apply(isDark) {
-      document.documentElement.classList.toggle('dark', isDark);
-      document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
-      btn.setAttribute('aria-pressed', String(isDark));
+    function read() {
+      try {
+        var stored = localStorage.getItem('theme');
+        // Anything unrecognised (including null, and values left by the previous
+        // two-state version) resolves to system, matching ThemeScript.
+        return stored === 'light' || stored === 'dark' ? stored : 'system';
+      } catch (e) {
+        return 'system';
+      }
     }
 
-    apply(document.documentElement.classList.contains('dark'));
+    function apply(setting) {
+      var isDark = setting === 'dark' || (setting === 'system' && mql.matches);
+      document.documentElement.classList.toggle('dark', isDark);
+      document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+      btn.setAttribute('data-theme-setting', setting);
+      btn.setAttribute('aria-label', 'Color theme: ' + setting);
+    }
+
+    apply(read());
 
     btn.addEventListener('click', function () {
-      var next = !document.documentElement.classList.contains('dark');
+      var next = ORDER[(ORDER.indexOf(read()) + 1) % ORDER.length];
       apply(next);
-      // An explicit choice wins over the system preference from here on.
       try {
-        localStorage.setItem('theme', next ? 'dark' : 'light');
+        // 'system' is written rather than removed so the stored value always
+        // states the setting outright; ThemeScript treats it as unset anyway.
+        localStorage.setItem('theme', next);
       } catch (e) {}
     });
 
-    // Keep following the system while no explicit choice has been made.
-    mql.addEventListener('change', function (e) {
-      try {
-        if (localStorage.getItem('theme')) return;
-      } catch (err) {
-        return;
-      }
-      apply(e.matches);
+    // Only the system setting tracks the OS; an explicit choice ignores it.
+    mql.addEventListener('change', function () {
+      if (read() === 'system') apply('system');
     });
   })();
 </script>

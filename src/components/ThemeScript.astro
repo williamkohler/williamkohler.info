@@ -8,8 +8,9 @@
   (function () {
     try {
       var stored = localStorage.getItem('theme');
-      // `stored !== 'light'` (not `!stored`) so a corrupt value falls back to
-      // the system preference rather than hard light.
+      // Only 'light' and 'dark' are explicit choices. 'system' is stored the same
+      // way but resolves through the media query, so it lands here identically to
+      // having no stored value at all — which is also what a corrupt value gets.
       var isDark =
         stored === 'dark' ||
         (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
