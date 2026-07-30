@@ -101,7 +101,9 @@ const frameFor = (image: ImageMetadata) => {
     }
   </div>
 
-  <p class="mt-1 text-lg text-muted">{tagline}</p>
+  {/* whitespace-pre-line so a multi-line tagline keeps its break; single-line
+      taglines are unaffected, and wrapping still works normally. */}
+  <p class="mt-1 text-lg whitespace-pre-line text-muted">{tagline}</p>
 
   {
     lead && (

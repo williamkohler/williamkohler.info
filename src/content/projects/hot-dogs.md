@@ -1,6 +1,8 @@
 ---
 name: hot dogs
-tagline: Tinder for Dogs
+tagline: |-
+  ... It's basically Tinder for dogs
+  hot dogs for all dogs!
 summary: >-
   An app just for fun — who doesn't love cute dog pictures on the internet. A native
   SwiftUI card stack where you swipe right with a hot dog emoji and swipe left by
