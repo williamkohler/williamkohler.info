@@ -9,8 +9,9 @@ summary: >-
 repoStatus: private
 tech: [Elixir, Phoenix, LiveView, GenServer, PubSub, Tailwind CSS]
 year: "2026"
-icon: /icons/spinbook.png
+icon: /icons/spinbook-blade.png
 iconInvertOnDark: false
+iconSpinOnHover: true
 screenshot:
   - spinbook-matches.png
   - spinbook-betting.png

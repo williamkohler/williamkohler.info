@@ -62,6 +62,10 @@ const projects = defineCollection({
       icon: z.string().optional(),
       /** Optional second mark that cross-fades on hover — only hihat has a pair. */
       iconHover: z.string().optional(),
+      /* Spins the mark while the card is hovered, mirroring the blade rotation in
+         spinbook itself. Only reads as intentional on a radially symmetric icon,
+         so it stays opt-in rather than applying to every project. */
+      iconSpinOnHover: z.boolean().default(false),
       /* The monochrome hihat SVGs are inverted to stay visible on dark. Full-color
          artwork (goblin, spinbook) must opt out or the palette inverts with it. */
       iconInvertOnDark: z.boolean().default(true),
@@ -86,6 +90,16 @@ const projects = defineCollection({
     .refine((d) => d.iconHover === undefined || d.icon !== undefined, {
       message: 'iconHover requires icon',
       path: ['iconHover'],
+    })
+    .refine((d) => !d.iconSpinOnHover || d.icon !== undefined, {
+      message: 'iconSpinOnHover requires icon',
+      path: ['iconSpinOnHover'],
+    })
+    /* Both effects fire on the same hover: the mark would spin while cross-fading
+       into a second mark that is also spinning. Nothing reads clearly. */
+    .refine((d) => !d.iconSpinOnHover || d.iconHover === undefined, {
+      message: 'iconSpinOnHover and iconHover cannot both be set',
+      path: ['iconSpinOnHover'],
     })
     .refine((d) => d.screenshot === undefined || d.screenshotAlt !== undefined, {
       message: 'A project with a screenshot must also define screenshotAlt',

@@ -19,6 +19,7 @@ const {
   icon,
   iconHover,
   iconInvertOnDark,
+  iconSpinOnHover,
   screenshot,
   screenshotAlt,
 } = project.data;
@@ -71,6 +72,11 @@ const frameFor = (image: ImageMetadata) => {
               'col-start-1 row-start-1 size-8 transition-opacity duration-200',
               iconHover && 'group-hover:opacity-0',
               iconInvertOnDark && 'dark:invert',
+              /* 1.8s matches the blade rotation in spinbook itself; the Tailwind
+                 default of 1s reads as a loading spinner. motion-safe so it stays
+                 still for reduced-motion visitors. */
+              iconSpinOnHover &&
+                'motion-safe:group-hover:animate-[spin_1.8s_linear_infinite]',
             ]}
           />
           {iconHover && (
