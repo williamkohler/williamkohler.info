@@ -19,7 +19,7 @@ const {
   icon,
   iconHover,
   iconInvertOnDark,
-  iconSpinOnHover,
+  iconSpin,
   screenshot,
   screenshotAlt,
 } = project.data;
@@ -98,11 +98,12 @@ const frameFor = (image: ImageMetadata) => {
               'col-start-1 row-start-1 size-14 object-contain transition-opacity duration-200',
               iconHover && 'group-hover:opacity-0',
               iconInvertOnDark && 'dark:invert',
-              /* 1.8s matches the blade rotation in spinbook itself; the Tailwind
-                 default of 1s reads as a loading spinner. motion-safe so it stays
-                 still for reduced-motion visitors. */
-              iconSpinOnHover &&
-                'motion-safe:group-hover:animate-[spin_1.8s_linear_infinite]',
+              /* 3s rather than the 1.8s spinbook uses on its own blades. This mark
+                 is close to 4-fold symmetric — a gold X on a round body — so at
+                 1.8s the rotation blurs into a shimmer and reads as not moving at
+                 all. Slowing it down is what makes the turn legible. motion-safe
+                 so it stays still for reduced-motion visitors. */
+              iconSpin && 'motion-safe:animate-[spin_3s_linear_infinite]',
             ]}
           />
           {iconHover && (

@@ -63,10 +63,10 @@ const projects = defineCollection({
       icon: z.string().optional(),
       /** Optional second mark that cross-fades on hover — only hihat has a pair. */
       iconHover: z.string().optional(),
-      /* Spins the mark while the card is hovered, mirroring the blade rotation in
-         spinbook itself. Only reads as intentional on a radially symmetric icon,
-         so it stays opt-in rather than applying to every project. */
-      iconSpinOnHover: z.boolean().default(false),
+      /* Spins the mark continuously, mirroring the blade rotation in spinbook
+         itself. Only reads as intentional on a radially symmetric icon, so it
+         stays opt-in rather than applying to every project. */
+      iconSpin: z.boolean().default(false),
       /* Inverts a mark that would otherwise vanish on dark — the default suits
          black line art. Anything carrying its own colour (the gold hihats, goblin,
          spinbook) must opt out, or the hue inverts along with the lightness. */
@@ -93,15 +93,15 @@ const projects = defineCollection({
       message: 'iconHover requires icon',
       path: ['iconHover'],
     })
-    .refine((d) => !d.iconSpinOnHover || d.icon !== undefined, {
-      message: 'iconSpinOnHover requires icon',
-      path: ['iconSpinOnHover'],
+    .refine((d) => !d.iconSpin || d.icon !== undefined, {
+      message: 'iconSpin requires icon',
+      path: ['iconSpin'],
     })
-    /* Both effects fire on the same hover: the mark would spin while cross-fading
-       into a second mark that is also spinning. Nothing reads clearly. */
-    .refine((d) => !d.iconSpinOnHover || d.iconHover === undefined, {
-      message: 'iconSpinOnHover and iconHover cannot both be set',
-      path: ['iconSpinOnHover'],
+    /* A spinning mark cross-fading into a second mark reads as neither: the hover
+       swap is lost mid-rotation, and only the base icon carries the animation. */
+    .refine((d) => !d.iconSpin || d.iconHover === undefined, {
+      message: 'iconSpin and iconHover cannot both be set',
+      path: ['iconSpin'],
     })
     .refine((d) => d.screenshot === undefined || d.screenshotAlt !== undefined, {
       message: 'A project with a screenshot must also define screenshotAlt',

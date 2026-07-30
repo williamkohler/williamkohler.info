@@ -11,7 +11,7 @@ tech: [Elixir, Phoenix, LiveView, GenServer, PubSub, Tailwind CSS]
 year: "2026"
 icon: /icons/spinbook-blade.png
 iconInvertOnDark: false
-iconSpinOnHover: true
+iconSpin: true
 screenshot:
   - spinbook-matches.png
   - spinbook-betting.png
