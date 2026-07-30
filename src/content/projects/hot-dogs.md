@@ -11,7 +11,7 @@ summary: >-
 repo: https://github.com/williamkohler/hot-dogs
 tech: [Swift, iOS, Firebase, Elixir, Phoenix]
 year: "2026"
-icon: /icons/hot-dogs.png
+icon: /icons/hot-dogs.mp4
 iconInvertOnDark: false
 screenshot:
   - hot-dogs.png
