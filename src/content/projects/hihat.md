@@ -12,6 +12,7 @@ tech: [Elixir, Phoenix, LiveView, Oban, PostgreSQL, Fly.io]
 year: "2025–"
 icon: /icons/open-hihat.svg
 iconHover: /icons/closed-hihat.svg
+iconInvertOnDark: false
 screenshot:
   - hihat-calendar.png
   - hihat-demand-signals.png

@@ -66,8 +66,9 @@ const projects = defineCollection({
          spinbook itself. Only reads as intentional on a radially symmetric icon,
          so it stays opt-in rather than applying to every project. */
       iconSpinOnHover: z.boolean().default(false),
-      /* The monochrome hihat SVGs are inverted to stay visible on dark. Full-color
-         artwork (goblin, spinbook) must opt out or the palette inverts with it. */
+      /* Inverts a mark that would otherwise vanish on dark — the default suits
+         black line art. Anything carrying its own colour (the gold hihats, goblin,
+         spinbook) must opt out, or the hue inverts along with the lightness. */
       iconInvertOnDark: z.boolean().default(true),
       /* One filename under src/assets/projects/ (e.g. "spinbook.png"), or several
          for a gallery. Both forms coerce to an array so the card renders one path.
