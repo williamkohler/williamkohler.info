@@ -6,7 +6,6 @@ logo: /logos/kurland-agency.png
 invertOnDark: true
 start: 2013-01-01
 end: 2018-06-30
-note: Where the engineering career started — by automating the job I already had.
 order: 3
 roles:
   - title: Director of Information Technology and Innovation
