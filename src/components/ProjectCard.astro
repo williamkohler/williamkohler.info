@@ -44,6 +44,10 @@ const gallery = (screenshot ?? []).map((file, i) => {
 
 const [lead, ...rest] = gallery;
 
+/* An animated mark ships as a video rather than a GIF — far smaller at this
+   quality, and the only widely supported option for smooth 24fps. */
+const iconIsVideo = icon?.endsWith('.mp4') ?? false;
+
 /* A portrait shot would lose its content to a 16:9 crop, so the frame follows the
    image instead of the reverse. Phone captures are far taller again (~1:2.2) and
    would sit as a sliver in a 4:5 box, so they get a frame of their own. */
@@ -63,13 +67,35 @@ const frameFor = (image: ImageMetadata) => {
       icon && (
         /* With a hover mark, both icons occupy the same grid cell and cross-fade;
            stacking avoids the layout shift a src swap would cause. On its own, the
-           single icon just sits in that cell. */
-        <span class="grid size-8 shrink-0 place-items-center" aria-hidden="true">
+           single icon just sits in that cell.
+
+           size-14 matches the 56px height of the Experience logos so the two
+           sections read at the same scale — square here, rather than the wider
+           box there, because these are app marks and those are wordmarks. All
+           three size-14s must stay in step or the cross-fade misaligns. */
+        <span class="grid size-14 shrink-0 place-items-center" aria-hidden="true">
+          {iconIsVideo ? (
+            /* muted + playsinline are what make autoplay permitted at all; without
+               both, mobile Safari and Chrome refuse to start. The poster keeps the
+               cell filled on first paint instead of flashing an empty box. */
+            <video
+              src={icon}
+              poster={icon.replace(/\.mp4$/, '.png')}
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              data-motion-video
+              class="col-start-1 row-start-1 size-14 rounded-md object-cover"
+            />
+          ) : (
+            <Fragment>
           <img
             src={icon}
             alt=""
             class:list={[
-              'col-start-1 row-start-1 size-8 transition-opacity duration-200',
+              'col-start-1 row-start-1 size-14 object-contain transition-opacity duration-200',
               iconHover && 'group-hover:opacity-0',
               iconInvertOnDark && 'dark:invert',
               /* 1.8s matches the blade rotation in spinbook itself; the Tailwind
@@ -84,10 +110,12 @@ const frameFor = (image: ImageMetadata) => {
               src={iconHover}
               alt=""
               class:list={[
-                'col-start-1 row-start-1 size-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+                'col-start-1 row-start-1 size-14 object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100',
                 iconInvertOnDark && 'dark:invert',
               ]}
             />
+          )}
+            </Fragment>
           )}
         </span>
       )

@@ -9,7 +9,7 @@ summary: >-
 repo: https://github.com/williamkohler/goblin
 tech: [Python, Discord API, Django, Wagtail, Spotify API]
 year: "2025"
-icon: /icons/goblin.png
+icon: /icons/goblin.mp4
 iconInvertOnDark: false
 screenshot:
   - goblin.png

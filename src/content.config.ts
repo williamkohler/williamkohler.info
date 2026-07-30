@@ -58,7 +58,8 @@ const projects = defineCollection({
       repoStatus: z.enum(['public', 'private']).default('public'),
       tech: z.array(z.string()).min(1),
       year: z.string(),
-      /** Path under public/, e.g. "/icons/spinbook.png". */
+      /* Path under public/, e.g. "/icons/spinbook-blade.png". A ".mp4" here
+         renders as a looping muted video instead of an <img> — see ProjectCard. */
       icon: z.string().optional(),
       /** Optional second mark that cross-fades on hover — only hihat has a pair. */
       iconHover: z.string().optional(),
