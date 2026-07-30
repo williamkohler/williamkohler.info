@@ -3,6 +3,7 @@ import '../styles/global.css';
 import BaseHead from '../components/BaseHead.astro';
 import ThemeScript from '../components/ThemeScript.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import EmailLink from '../components/EmailLink.astro';
 import { SITE } from '../data/site';
 
 interface Props {
@@ -41,12 +42,9 @@ const nav = [
         {/* Contact actions live here rather than in the hero, so they stay reachable
             once the page is scrolled. Labels shorten below `sm` to fit beside the nav. */}
         <div class="flex items-center gap-2">
-          <a
-            href={`mailto:${SITE.email}`}
+          <EmailLink
             class="rounded-md px-3 py-1.5 text-sm font-medium text-brand transition-colors hover:bg-border/40"
-          >
-            Get in touch
-          </a>
+          />
           <a
             href={SITE.resume}
             download="Bill-Kohler-Resume.pdf"

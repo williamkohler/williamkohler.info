@@ -2,7 +2,12 @@ export const SITE = {
   name: 'Bill Kohler',
   role: 'Software Engineer',
   location: 'Boston, MA',
-  email: 'bkohler4@gmail.com',
+  /* Split so the joined address never appears in the built HTML — see
+     EmailLink.astro, which reassembles it in the browser. Address-harvesting
+     bots overwhelmingly parse markup without executing JS, so keeping the two
+     halves apart is what makes the obfuscation worth anything. */
+  emailUser: 'bkohler4',
+  emailDomain: 'gmail.com',
   github: 'https://github.com/williamkohler',
   url: 'https://williamkohler.info',
   resume: '/bill-kohler-resume.pdf',

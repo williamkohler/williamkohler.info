@@ -16,7 +16,9 @@ const personLd = {
   '@type': 'Person',
   name: SITE.name,
   url: SITE.url,
-  email: `mailto:${SITE.email}`,
+  /* No `email` here on purpose. A labelled field in JSON-LD is the cheapest
+     scrape on the page — no parsing needed — and would hand over the address
+     that EmailLink goes to some trouble to keep out of the markup. */
   jobTitle: SITE.role,
   address: {
     '@type': 'PostalAddress',

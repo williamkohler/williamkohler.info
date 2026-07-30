@@ -1,0 +1,62 @@
+---
+import { SITE } from '../data/site';
+
+interface Props {
+  /** Extra classes for the anchor, so callers control placement and styling. */
+  class?: string;
+  label?: string;
+}
+
+const { class: className, label = 'Email me' } = Astro.props;
+
+/* The two halves ride in separate attributes and are joined at click time. The
+   built HTML therefore contains no "@" and no "mailto:", which is what the
+   common harvesters grep for. This is obfuscation, not security — anything that
+   runs a headless browser still gets the address. It raises the cost enough to
+   miss the bulk of drive-by scraping, and that is the whole claim. */
+---
+
+<a
+  href="#"
+  data-email-user={SITE.emailUser}
+  data-email-domain={SITE.emailDomain}
+  class:list={['js-email', className]}
+>
+  {label}
+</a>
+
+{/* Without JS the anchor above is inert, and a dead control is worse than an
+    honest one — so hide it and spell the address out instead. Still split, and
+    "at"/"dot" defeat a plain regex, but a human can read and retype it. */}
+<noscript>
+  <style>
+    .js-email {
+      display: none;
+    }
+  </style>
+  <span class:list={className}>
+    {SITE.emailUser} at {SITE.emailDomain.replace('.', ' dot ')}
+  </span>
+</noscript>
+
+{/* Inline for the same reason as ThemeScript: the handler must be bound before
+    a visitor can plausibly click, and a bundled module defers past that. */}
+<script is:inline>
+  (() => {
+    const join = (el) => `${el.dataset.emailUser}@${el.dataset.emailDomain}`;
+
+    for (const el of document.querySelectorAll('.js-email')) {
+      /* Set on hover/focus rather than only on click, so the browser's status
+         bar and the context menu's "Copy link address" both behave normally. */
+      const reveal = () => {
+        el.href = `mailto:${join(el)}`;
+      };
+      el.addEventListener('mouseenter', reveal);
+      el.addEventListener('focus', reveal);
+
+      /* Touch devices fire no mouseenter, and a keyboard Enter arrives as a
+         click, so resolve here too before the navigation is read. */
+      el.addEventListener('click', reveal);
+    }
+  })();
+</script>
