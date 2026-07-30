@@ -14,11 +14,9 @@ iconInvertOnDark: false
 screenshot:
   - goblin.png
   - goblin-discord.png
-  - goblin-playlist.png
 screenshotAlt:
   - The goblin blog timeline — a vertical rail of dated music posts with album and artist thumbnails, styled as a green-on-black CRT flyer.
   - The goblin bot replying in Discord to an /add_to_playlist command, confirming "Song Added to Playlist!" with album art for Nine Inch Nails and Tame Impala, and prompting for a narrower query when a search is ambiguous.
-  - The "goblin bot" public Spotify playlist, illustrated with a goblin scribe and holding six tracks the bot resolved from Discord links, including songs by Cher, Nine Inch Nails, and Tame Impala.
 order: 3
 highlights:
   - Ingests and parses Discord threads for shared media links.
