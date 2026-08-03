@@ -1,0 +1,125 @@
+---
+// One dialog for the whole page, rendered from BaseLayout rather than
+// ProjectCard — that component renders once per project, so colocating it here
+// would emit a copy of the dialog and its handler per card.
+//
+// Native <dialog> rather than a custom overlay: showModal() gives focus
+// trapping, Escape-to-close, and focus restoration back to the clicked
+// thumbnail for free, and the top layer sidesteps z-index entirely. That last
+// part matters here — the sticky header is `backdrop-blur-md`, and a
+// backdrop-filtered ancestor creates a containing block that can trap a
+// `position: fixed` overlay.
+---
+
+{/* p-0 is load-bearing: the backdrop-click test is `target === dialog`, so any
+    padding would become a dead zone that closes on what looks like the image.
+    The UA stylesheet caps a dialog at roughly `calc(100% - 6px - 2em)`, hence
+    the max-* resets. */}
+<dialog
+  id="lightbox"
+  aria-label="Screenshot viewer"
+  class="m-0 h-full max-h-none w-full max-w-none overscroll-contain bg-transparent p-0 backdrop:bg-black/80"
+>
+  {/* env() resolves to 0px without `viewport-fit=cover` in the viewport meta,
+      which this site deliberately does not set — the max() floor keeps a sane
+      inset either way. */}
+  <div
+    class="relative grid h-full w-full pt-[max(0.75rem,env(safe-area-inset-top))] pr-[max(0.75rem,env(safe-area-inset-right))] pb-[max(0.75rem,env(safe-area-inset-bottom))] pl-[max(0.75rem,env(safe-area-inset-left))]"
+  >
+    {/* Floated over the image rather than occupying a grid row of its own. As a
+        row it stole height from the image's track, which on a phone reads as
+        the image sitting low rather than centred in the viewport. */}
+    <div class="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-[max(0.75rem,env(safe-area-inset-right))] z-10 flex justify-end">
+      {/* size-11 is the 44px WCAG 2.2 / iOS HIG minimum — p-2 around a size-6
+          icon lands at 40px. touch-manipulation drops the double-tap delay. */}
+      <button
+        type="button"
+        data-lightbox-close
+        aria-label="Close"
+        class="grid size-11 cursor-pointer touch-manipulation place-items-center rounded-md bg-bg/80 text-fg transition-colors hover:bg-border/60"
+      >
+        <svg
+          class="size-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    {/* The image is centred by this wrapper rather than by `mx-auto` on the img
+        itself, which only handles the horizontal axis — a landscape shot in a
+        tall row would sit against the top with all the slack below it. min-h-0
+        lets the row shrink below the image's intrinsic height so `max-h-full`
+        can actually bind.
+
+        object-contain and no aspect-* class: the card thumbnails are cropped by
+        `frameFor`, and showing the whole frame is the point of opening one. */}
+    <div class="grid min-h-0 min-w-0 place-items-center">
+      {/* Capped against the viewport rather than with `max-h-full`. The wrapper
+          is a grid item sized from its content, so a percentage max-height
+          resolves against the image's own height — circular, and the constraint
+          never binds. A tall screenshot then overflowed the screen. The 1.5rem
+          subtracted is the 0.75rem inset doubled. */}
+      <img
+        id="lightbox-img"
+        alt=""
+        class="max-h-[calc(100dvh-1.5rem)] max-w-full object-contain"
+      />
+    </div>
+  </div>
+</dialog>
+
+<script is:inline>
+  (function () {
+    var dialog = document.getElementById('lightbox');
+    var img = document.getElementById('lightbox-img');
+    // No showModal means no focus trap and no top layer, so leave the anchors
+    // alone and let them navigate as they did before.
+    if (!dialog || !img || typeof dialog.showModal !== 'function') return;
+
+    // Delegated so it covers every card with one listener, and keeps working if
+    // the gallery markup changes.
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest('[data-lightbox]');
+      if (!trigger) return;
+      // Cmd/Ctrl/middle-click still opens a new tab. These are real links, and
+      // swallowing those gestures would cost an affordance for nothing.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+      e.preventDefault();
+      img.src = trigger.dataset.fullSrc;
+      if (trigger.dataset.fullSrcset) {
+        img.srcset = trigger.dataset.fullSrcset;
+        img.sizes = '92vw';
+      }
+      img.width = trigger.dataset.fullWidth;
+      img.height = trigger.dataset.fullHeight;
+      img.alt = trigger.dataset.fullAlt || '';
+      // Focus returns to `trigger` on close, handled natively.
+      dialog.showModal();
+    });
+
+    // Fires for the backdrop too, since that is painted as part of the dialog
+    // box; p-0 makes this test exact.
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog) dialog.close();
+    });
+
+    dialog.querySelector('[data-lightbox-close]').addEventListener('click', function () {
+      dialog.close();
+    });
+
+    // Escape is native. Dropping the source releases the decoded bitmap, which
+    // is worth doing for full-size screenshots.
+    dialog.addEventListener('close', function () {
+      img.removeAttribute('src');
+      img.removeAttribute('srcset');
+    });
+  })();
+</script>

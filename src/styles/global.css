@@ -117,6 +117,14 @@
     }
   }
 
+  /* `showModal()` blocks interaction with the page but not scrolling — iOS
+     Safari still pans it behind the dialog. Locking `html` rather than `body`
+     avoids the jump to top that `position: fixed` on body causes, and driving
+     it off `:has()` means it cannot desync from the dialog's actual state. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-fg);

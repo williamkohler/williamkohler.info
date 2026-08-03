@@ -4,6 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import ThemeScript from '../components/ThemeScript.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import EmailLink from '../components/EmailLink.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { SITE } from '../data/site';
 
 interface Props {
@@ -88,6 +89,8 @@ const nav = [
         <p>© {new Date().getFullYear()} {SITE.name}</p>
       </div>
     </footer>
+
+    <Lightbox />
 
     {/* Lives here rather than in ProjectCard because that component renders once
         per project — colocating it there emitted four copies of the same handler.

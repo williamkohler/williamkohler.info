@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -34,13 +34,36 @@ const modules = import.meta.glob<{ default: ImageMetadata }>(
 
 /* Schema guarantees screenshotAlt matches screenshot in length, so the index
    lookup is safe. */
-const gallery = (screenshot ?? []).map((file, i) => {
-  const image = modules[`../assets/projects/${file}`]?.default;
-  if (!image) {
-    throw new Error(`${project.id}: screenshot "${file}" not found in src/assets/projects/`);
-  }
-  return { image, alt: screenshotAlt![i] };
-});
+const gallery = await Promise.all(
+  (screenshot ?? []).map(async (file, i) => {
+    const image = modules[`../assets/projects/${file}`]?.default;
+    if (!image) {
+      throw new Error(`${project.id}: screenshot "${file}" not found in src/assets/projects/`);
+    }
+
+    /* The lightbox needs its own derivative. It cannot reuse the thumbnail —
+       `frameFor` crops it — and it must not fall back to `image.src`, which is
+       the untouched source PNG (1.4MB for goblin, against ~30kB for the webp
+       actually shown). 2000px covers a 2x laptop inside the dialog; the native
+       3024px of these captures adds bytes for nothing visible. Widths are
+       filtered against the source so Astro never emits an upscale — the phone
+       captures are only ~1200px wide. */
+    const candidates = [800, 1400, 2000].filter((w) => w <= image.width);
+    /* A source narrower than the smallest step would filter to nothing, and an
+       empty `widths` is an error — fall back to its native width. */
+    const widths = candidates.length > 0 ? candidates : [image.width];
+    const full = await getImage({ src: image, widths, format: 'webp' });
+
+    /* `full.attributes` carries the *source* dimensions, not the derivative's,
+       so the largest requested width is the one that describes `full.src`.
+       Handing the img the source 3024 against a 2000px file would declare the
+       wrong intrinsic size. */
+    const fullWidth = widths[widths.length - 1];
+    const fullHeight = Math.round(fullWidth * (image.height / image.width));
+
+    return { image, alt: screenshotAlt![i], full, fullWidth, fullHeight };
+  })
+);
 
 const [lead, ...rest] = gallery;
 
@@ -143,12 +166,20 @@ const frameFor = (image: ImageMetadata) => {
   {
     lead && (
       <div class="mt-5 space-y-3">
-        {/* Links straight to the optimized asset — a full-size view with no
-            lightbox library, keeping the page free of client JS. */}
+        {/* Opens in the shared lightbox (BaseLayout). Still a real link to the
+            asset: that is the no-JS fallback, and it keeps Cmd-click and
+            "Open image in new tab" working. Full-size view without a lightbox
+            library — a native <dialog> and one delegated handler. */}
         <a
           href={lead.image.src}
           target="_blank"
           rel="noopener noreferrer"
+          data-lightbox
+          data-full-src={lead.full.src}
+          data-full-srcset={lead.full.srcSet.attribute}
+          data-full-width={lead.fullWidth}
+          data-full-height={lead.fullHeight}
+          data-full-alt={lead.alt}
           class="block overflow-hidden rounded-(--radius-card) border border-border"
         >
           <Image
@@ -171,6 +202,12 @@ const frameFor = (image: ImageMetadata) => {
                   href={s.image.src}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-lightbox
+                  data-full-src={s.full.src}
+                  data-full-srcset={s.full.srcSet.attribute}
+                  data-full-width={s.fullWidth}
+                  data-full-height={s.fullHeight}
+                  data-full-alt={s.alt}
                   class="block overflow-hidden rounded-(--radius-card) border border-border"
                 >
                   <Image
