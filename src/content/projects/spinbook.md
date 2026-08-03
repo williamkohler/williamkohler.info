@@ -1,6 +1,6 @@
 ---
 name: spinbook
-tagline: A parimutuel betting engine for Beyblade X matches.
+tagline: A betting engine for Beyblade.
 summary: >-
   A real-time wagering app built to push OTP where it is strongest. Each match
   runs its own GenServer bookie process, recalculating odds as bets land and
