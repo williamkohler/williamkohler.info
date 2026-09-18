@@ -5,7 +5,7 @@ logo: /logos/mastercard.svg
 start: 2018-06-01
 end: 2024-11-30
 note: Joined via the SessionM acquisition; promoted twice.
-order: 2
+order: 3
 roles:
   - title: Senior Software Engineer
     start: 2022-12-01

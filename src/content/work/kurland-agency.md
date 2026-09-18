@@ -6,7 +6,7 @@ logo: /logos/kurland-agency.png
 invertOnDark: true
 start: 2013-01-01
 end: 2018-06-30
-order: 3
+order: 4
 roles:
   - title: Director of Information Technology and Innovation
     start: 2017-01-01

@@ -29,7 +29,7 @@ const work = defineCollection({
       end: z.coerce.date().nullable(),
       /** Context line, e.g. "Joined via the SessionM acquisition; promoted twice." */
       note: z.string().optional(),
-      /** Mastercard has 3, Kurland 2, Youth Inc 1. min(1) keeps render paths safe. */
+      /** Mastercard has 3, Kurland 2, Youth Inc and Omada 1. min(1) keeps render paths safe. */
       roles: z.array(role).min(1),
       /** 1 = most recent. */
       order: z.number().int(),
